@@ -33,6 +33,8 @@ class VotesController < ApplicationController
     end
     
     # Create voter record to mark as voted
+    # In  a more robust version, we might use a join table, but since we're a
+    # assuming good faith, I figured this would save time.
     Voter.create!(email: voter_email, voted_at: Time.current)
     
     redirect_to thank_you_path
