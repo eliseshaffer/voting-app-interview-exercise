@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   # Login routes
   get "login" => "login#new"
   post "login" => "login#create"
+
+  # Voting routes
+  resources :votes, only: [:new, :create]
+  get "thank_you" => "votes#thank_you"
 end
