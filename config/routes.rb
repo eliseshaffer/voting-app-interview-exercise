@@ -15,4 +15,7 @@ Rails.application.routes.draw do
   # Voting routes
   resources :votes, only: [:new, :create]
   get "thank_you" => "votes#thank_you"
+
+  # Dashboard route
+  get "dashboard" => "dashboard#index"
 end
