@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Vote = ({ candidates = [] }) => {
+const Vote = ({ candidates = [], candidateCount = 0 }) => {
   const [selectedCandidate, setSelectedCandidate] = useState("");
   const [candidateName, setCandidateName] = useState("");
   
@@ -44,23 +44,29 @@ const Vote = ({ candidates = [] }) => {
         </div>
       )}
       
-      <div>
-        <h3>Or, add a new candidate:</h3>
-        <form method="post" action="/votes" onSubmit={handleWriteInSubmit}>
-          <input type="hidden" name="authenticity_token" value={csrfToken} />
-          <input type="hidden" name="candidate_name" value={candidateName} />
-          
-          <input
-            type="text"
-            id="candidateName"
-            value={candidateName}
-            onChange={(e) => setCandidateName(e.target.value)}
-            placeholder="Enter candidate name"
-            required
-          />
-          <button type="submit" disabled={!candidateName.trim()}>Vote</button>
-        </form>
-      </div>
+      {candidateCount < 10 && (
+        <div>
+          <h3>Or, add a new candidate:</h3>
+          <form method="post" action="/votes" onSubmit={handleWriteInSubmit}>
+            <input type="hidden" name="authenticity_token" value={csrfToken} />
+            <input type="hidden" name="candidate_name" value={candidateName} />
+            
+            <input
+              type="text"
+              id="candidateName"
+              value={candidateName}
+              onChange={(e) => setCandidateName(e.target.value)}
+              placeholder="Enter candidate name"
+              required
+            />
+            <button type="submit" disabled={!candidateName.trim()}>Vote</button>
+          </form>
+        </div>
+      )}
+      
+      {candidateCount >= 10 && (
+        <p><em>Maximum number of candidates (10) reached. You can only vote for existing candidates.</em></p>
+      )}
     </div>
   );
 };

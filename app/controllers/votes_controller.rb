@@ -7,6 +7,7 @@ class VotesController < ApplicationController
     end
     
     @candidates = Vote.all.map(&:candidate)
+    @candidate_count = Vote.count
   end
 
   def thank_you
