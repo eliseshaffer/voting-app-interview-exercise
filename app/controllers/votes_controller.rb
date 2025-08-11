@@ -1,5 +1,6 @@
 class VotesController < ApplicationController
   def new
+    @candidates = Vote.all.map(&:candidate)
   end
 
   def thank_you
