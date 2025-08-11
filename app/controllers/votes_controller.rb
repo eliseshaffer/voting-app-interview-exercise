@@ -1,5 +1,11 @@
 class VotesController < ApplicationController
   def new
+    # Check if voter has already voted
+    if session[:voter_email] && Voter.exists?(email: session[:voter_email])
+      redirect_to thank_you_path, alert: "You have already voted!"
+      return
+    end
+    
     @candidates = Vote.all.map(&:candidate)
   end
 
@@ -7,6 +13,13 @@ class VotesController < ApplicationController
   end
 
   def create
+    # Check if voter has already voted
+    voter_email = session[:voter_email]
+    if !voter_email || Voter.exists?(email: voter_email)
+      redirect_to thank_you_path, alert: "You have already voted or are not logged in!"
+      return
+    end
+    
     candidate_name = params[:candidate_name]
     
     # Find or create the vote record and increment the count
@@ -17,6 +30,9 @@ class VotesController < ApplicationController
       vote.vote_count = 1
       vote.save!
     end
+    
+    # Create voter record to mark as voted
+    Voter.create!(email: voter_email, voted_at: Time.current)
     
     redirect_to thank_you_path
   end
